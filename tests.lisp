@@ -73,7 +73,7 @@
   (feature-syntax-tests))
 
 (defun run-tests ()
-  (let ((results (run 'madeira-port)))
+  (let ((results (run :madeira-port)))
     (explain! results)
     (unless (results-status results)
       (error "Tests failed."))))
