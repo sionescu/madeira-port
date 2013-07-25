@@ -22,13 +22,14 @@
   :licence "MIT"
   :description
   "Provides :MADEIRA-PORT file class for ASDF, and an extended #+ and #- syntax."
+  :depends-on (:split-sequence)
   :components
   ((:file "madeira-port")))
 
 (defsystem :madeira-port-tests
   :licence "MIT"
   :description "Tests for MADEIRA-PORT."
-  :depends-on (:madeira-port :eos)
+  :depends-on (:madeira-port :fiveam)
   :components
   ((:file "tests")))
 

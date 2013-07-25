@@ -17,7 +17,7 @@
 ;;;; SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 (defpackage :madeira-port
-  (:use :cl :asdf)
+  (:use :cl :asdf :split-sequence)
   (:export #:madeira-port
            #:feature-eval
            #:extend-feature-syntax
@@ -130,6 +130,12 @@ Conses evaluate depending on the operator in the CAR:
     ALLOW-INTERNAL is true) symbol in it that has an associated class
     definition. Otherwise evaluates to NIL.
 
+  :VERSION>= desired-version
+
+    Evaluates to T if DESIRED-VERSION is greater than the host
+    version, otherwise evaluates to NIL. DESIRED-VERSION must be a
+    string composed of non-negative integers separated by #\.
+
 In all of these both SYMBOL-NAME and PACKAGE-NAME can be any string
 designators.
 "
@@ -221,6 +227,45 @@ designators.
   (multiple-value-bind (sym ok) (get-symbol symbol-name package-name allow-internal)
     (when ok
       (find-class sym))))
+
+(defeature :version>= (version-string)
+  (let ((desired-version (split-version-string version-string))
+        (host-version (host-version)))
+    (and host-version (version>= desired-version host-version))))
+
+(defun host-version (&optional (host-version (lisp-implementation-version)))
+  (check-type host-version string)
+  (cond
+    #+sbcl
+    (t (split-version-string
+        (first (split-sequence #\- host-version))))
+    #+ccl
+    (t (list ccl::*openmcl-major-version*
+             ccl::*openmcl-minor-version*
+             (if ccl::*openmcl-svn-revision*
+                 ;; example: 15329M-trunk
+                 (parse-integer ccl::*openmcl-svn-revision*
+                                :junk-allowed t)
+                 0)))
+    (t (error "Host unknown, cannot compute version"))))
+
+(defun split-version-string (version-string)
+  (let ((version-components
+          (mapcar #'parse-integer
+                  (split-sequence #\. version-string))))
+    (assert (every (lambda (n) (>= n 0)) version-components))
+    version-components))
+
+(defun version>= (x y)
+  (labels ((bigger (x y)
+             (cond ((not y) t)
+                   ((not x) nil)
+                   ((> (car x) (car y)) t)
+                   ((= (car x) (car y))
+                    (bigger (cdr x) (cdr y))))))
+    (and x y
+         (= (car x) (car y))
+         (or (not (cdr y)) (bigger (cdr x) (cdr y))))))
 
 ;;;; Readtable support for FEATURE-EVAL.
 

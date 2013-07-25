@@ -19,10 +19,13 @@
 (in-package :cl-user)
 
 (defpackage :madeira-port-tests
-  (:use :cl :madeira-port :eos)
+  (:use :cl :madeira-port :fiveam)
   (:export #:run-tests))
 
 (in-package :madeira-port-tests)
+
+(def-suite :madeira-port)
+(in-suite :madeira-port)
 
 (defun feature-eval-tests ()
   (is (feature-eval '(:and)))
