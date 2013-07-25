@@ -66,8 +66,10 @@
     (is (eq :ok (read-from-string "#+(:find-symbol #:cons :cl) :ok :oops")))
     (is (eq :ok (read-from-string "#-(:find-symbol #:cons :cl) :oops :ok")))))
 
-(test madeira-port
-  (feature-eval-tests)
+(test madeira-port/eval
+  (feature-eval-tests))
+
+(test madeira-port/syntax
   (feature-syntax-tests))
 
 (defun run-tests ()
