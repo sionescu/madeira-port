@@ -16,6 +16,9 @@
 ;;;; TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 ;;;; SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+(unless (or #+asdf3 (asdf/driver:version<= "2.29" (asdf-version)))
+  (error "You need ASDF >= 2.29 to load this system correctly."))
+
 (defsystem :madeira-port
   :author "Nikodemus Siivola <nikodemus@random-state.net>"
   :version "1.0"
@@ -26,13 +29,14 @@
   :components
   ((:file "madeira-port")))
 
-(defsystem :madeira-port-tests
+(defsystem :madeira-port/tests
   :licence "MIT"
   :description "Tests for MADEIRA-PORT."
   :depends-on (:madeira-port :fiveam)
   :components
   ((:file "tests")))
 
-(defmethod perform ((op test-op) (sys (eql (find-system :madeira-port))))
-  (load-system :madeira-port-tests :force '(:madeira-port-tests))
-  (funcall (intern "RUN-TESTS" :madeira-port-tests)))
+(defmethod perform ((o test-op)
+                    (c (eql (find-system :madeira-port))))
+  (load-system :madeira-port/tests :force '(:madeira-port/tests))
+  (asdf/package:symbol-call :madeira-port-tests '#:run-tests))
