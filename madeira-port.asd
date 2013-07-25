@@ -29,7 +29,7 @@
 (defsystem :madeira-port-tests
   :licence "MIT"
   :description "Tests for MADEIRA-PORT."
-  :depends-on (:madeira-port :eos)
+  :depends-on (:madeira-port :fiveam)
   :components
   ((:file "tests")))
 
