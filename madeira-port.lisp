@@ -17,7 +17,7 @@
 ;;;; SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 (defpackage :madeira-port
-  (:use :cl :asdf)
+  (:use :cl :asdf :split-sequence)
   (:export #:madeira-port
            #:feature-eval
            #:extend-feature-syntax))
@@ -224,7 +224,7 @@ designators.
   (cond
     #+sbcl
     (t (split-version-string
-        (first (asdf:split-string host-version :separator '(#\-)))))
+        (first (split-sequence #\- host-version))))
     #+ccl
     (t (list ccl::*openmcl-major-version*
              ccl::*openmcl-minor-version*
@@ -238,8 +238,7 @@ designators.
 (defun split-version-string (version-string)
   (let ((version-components
           (mapcar #'parse-integer
-                  (asdf:split-string version-string
-                                     :separator '(#\.)))))
+                  (split-sequence #\. version-string))))
     (assert (every (lambda (n) (>= n 0)) version-components))
     version-components))
 

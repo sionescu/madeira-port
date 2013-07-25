@@ -22,6 +22,7 @@
   :licence "MIT"
   :description
   "Provides :MADEIRA-PORT file class for ASDF, and an extended #+ and #- syntax."
+  :depends-on (:split-sequence)
   :components
   ((:file "madeira-port")))
 
