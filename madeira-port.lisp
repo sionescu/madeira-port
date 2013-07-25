@@ -316,6 +316,7 @@ options evaluate to true under FEATURE-EVAL."))
         (call-next-method))))
 
 (defmethod shared-initialize :after ((port madeira-port) slots &key when unless)
+  (declare (ignorable slots))
   (setf (slot-value port 'test)
         (cond ((and when unless)
                `(:and ,when (:not ,unless)))
