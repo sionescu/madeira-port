@@ -21,7 +21,7 @@
 
 (defsystem :madeira-port
   :author "Nikodemus Siivola <nikodemus@random-state.net>"
-  :version "1.0"
+  :version (:read-file-form "version.sexp")
   :licence "MIT"
   :description
   "Provides :MADEIRA-PORT file class for ASDF, and an extended #+ and #- syntax."
@@ -32,6 +32,7 @@
 (defsystem :madeira-port/tests
   :licence "MIT"
   :description "Tests for MADEIRA-PORT."
+  :version (:read-file-form "version.sexp")
   :depends-on (:madeira-port :fiveam)
   :components
   ((:file "tests")))
