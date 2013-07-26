@@ -16,8 +16,8 @@
 ;;;; TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 ;;;; SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-(unless (or #+asdf3 (asdf/driver:version<= "2.29" (asdf-version)))
-  (error "You need ASDF >= 2.29 to load this system correctly."))
+(unless (or #+asdf3 (asdf/driver:version<= "2.32" (asdf-version)))
+  (error "You need ASDF >= 2.32 to load this system correctly."))
 
 (defsystem :madeira-port
   :author "Nikodemus Siivola <nikodemus@random-state.net>"
@@ -36,7 +36,6 @@
   :components
   ((:file "tests")))
 
-(defmethod perform ((o test-op)
-                    (c (eql (find-system :madeira-port))))
+(defmethod perform ((o test-op) (c (eql (find-system :madeira-port))))
   (load-system :madeira-port/tests :force '(:madeira-port/tests))
-  (asdf/package:symbol-call :madeira-port-tests '#:run-tests))
+  (uiop:symbol-call :madeira-port-tests '#:run-tests))
