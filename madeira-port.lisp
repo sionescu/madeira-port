@@ -339,6 +339,11 @@ options evaluate to true under FEATURE-EVAL."))
   (when (feature-eval (test-expr port))
     (call-next-method)))
 
+(defmethod output-files :around ((op compile-op) (port madeira-port))
+  (if (feature-eval (test-expr port))
+      (call-next-method)
+      ()))
+
 ;;; Switch package to circumvent package locks on implementations supporting
 ;;; them -- not that ASDF currently locked, but it might be in the future.
 ;;;
